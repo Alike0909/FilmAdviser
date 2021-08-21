@@ -1,0 +1,3 @@
+([('main',
+   '/Users/godsmacbook/Desktop/Decode/FilmAdviser/dist/main',
+   'EXECUTABLE')],)

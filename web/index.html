@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="/eel.js"></script>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Film Adviser</title>
+</head>
+<body>
+    <section id="panel" class="panel">
+        <div class="instruction">
+            <span>1. Находим топовую актрису</span>
+            <span>2. В ее фильмографии ищем: Комедию</span>
+        </div>
+        <button id="show">Start</button>
+    </section>
+    <section class="actress">
+        <div id="actress-image" class="actress-image">
+            <span>image place</span>
+        </div>
+        <div class="buttons">
+            <button id="refresh">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bootstrap-reboot" viewBox="0 0 16 16">
+                    <path d="M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 0 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.812 6.812 0 0 0 1.16 8z"/>
+                    <path d="M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352h1.141zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324h-1.6z"/>
+                </svg>
+            </button>
+            <button id="nice">Nice!</button>
+        </div>
+    </section>
+    <section id="result" style="display:none;" class="result">
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            async function display_actress() {
+                let actressImage = await eel.getActressImage()();
+
+                const actressDiv = document.getElementById("actress-image");
+                Img = document.createElement("img");
+                Img.setAttribute("src", actressImage[0])
+                Img.setAttribute("id", actressImage[1])
+                actressDiv.appendChild(Img);
+
+                const btn = document.getElementById("show");
+                btn.style.pointerEvents = "none";
+
+                const panel = document.getElementById("panel");
+                panel.style.opacity = "0.7"
+            }
+
+            async function refresh() {
+                const actressDiv = document.getElementById("actress-image");
+                const imgAvailable = actressDiv.getElementsByTagName('img');
+                actressDiv.removeChild(imgAvailable[0]);
+
+                let actressImage = await eel.getActressImage()();
+                Img = document.createElement("img");
+                Img.setAttribute("src", actressImage[0]);
+                Img.setAttribute("id", actressImage[1]);
+                actressDiv.appendChild(Img);
+            }
+
+            async function display_film() {
+                const actressDiv = document.getElementById("actress-image");
+                const imgAvailable = actressDiv.getElementsByTagName('img');
+                let filmContent = await eel.getContent(imgAvailable[0].id)();
+
+                const resultDiv = document.getElementById("result");
+                resultDiv.style.display = "flex";
+                resultDiv.innerHTML = filmContent;
+            }
+
+            jQuery('#show').on('click', function(){
+                display_actress();
+            });
+
+            jQuery('#refresh').on('click', function(){
+                refresh();
+            });
+
+            jQuery('#nice').on('click', function(){
+                display_film();
+                confetti.start();
+            });
+        </script>
+
+        <script src="confetti.js"></script>
+</body>
+</html>
